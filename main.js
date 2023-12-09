@@ -7,9 +7,6 @@ function fixUrls(urls) {
     // Check for specific patterns first
     for (const pattern of patterns) {
       if (url.includes(pattern)) {
-        if (url.endsWith('D_') || url.endsWith('G_')) {
-          return url;
-        }
         const matches = url.match(new RegExp(`${pattern}([^/.']+)`));
         return matches ? `${pattern}${matches[1]}` : null;
       }
@@ -32,10 +29,8 @@ function generateJson(fixedUrls) {
       "Ammo": "Ammo",
       "Consumable_": "Consumable",
       "CreativePlot_": "Prefab",
-      "D_": "Weapon",
       "PW_": "Prefab",
-      "Ammo_": "Consumable",
-      "G_": "Weapon"
+      "Ammo_": "Consumable"
     };
 
     const assetTypes = {
@@ -48,10 +43,8 @@ function generateJson(fixedUrls) {
       "Ammo": "Ammo",
       "Consumable_": "Consumable",
       "CreativePlot_": "CreativePlot",
-      "D_": "Deco",
       "PW_": "PlaysetWorld",
-      "Ammo_": "Ammo",
-      "G_": "Gadget"
+      "Ammo_": "Ammo"
     };
     
     // Check for specific patterns first
@@ -115,24 +108,25 @@ const rl = readline.createInterface({
 });
 
 console.log("Created By AjaxFNC\n-------------------------------------------------")
-rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
-  if (answer === '1') {
-    processFile('input.txt', '.json', generateJson);
-  } else if (answer === '2') {
-    processFile('input.txt', '.txt', fixUrls);
-  } else {
-    console.error('Invalid choice. Please choose 1 for JSON or 2 for TXT.');
-    process.exit(1);
-  }
+// rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
+//   if (answer === '1') {
+    
+//   } else if (answer === '2') {
+//     processFile('input.txt', '.txt', fixUrls);
+//   } else {
+//     console.error('Invalid choice. Please choose 1 for JSON or 2 for TXT.');
+//     process.exit(1);
+//   }
 
-  rl.close();
-});
+//   rl.close();
+// });
+processFile('input.txt', '.json', generateJson);
 
 function processFile(inputFile, extension, processFunction) {
   const urls = readFile(inputFile);
   const processedData = processFunction(urls);
 
-  const outputFileName = 'output' + extension;
+  const outputFileName = 'PrimaryAssets' + extension;
   const outputContent = extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
   writeOutput(outputContent, outputFileName);
 }

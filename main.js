@@ -78,6 +78,7 @@ function generateJson(fixedUrls) {
       }
     }
     prefix = id.substring(0, amt)
+    console.log("JSON output file created.")
     return {
       Category: categories[prefix],
       PrimaryAsset: {

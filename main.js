@@ -108,19 +108,18 @@ const rl = readline.createInterface({
 });
 
 console.log("Created By AjaxFNC\n-------------------------------------------------")
-// rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
-//   if (answer === '1') {
+rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
+  if (answer === '1') {
     
-//   } else if (answer === '2') {
-//     processFile('input.txt', '.txt', fixUrls);
-//   } else {
-//     console.error('Invalid choice. Please choose 1 for JSON or 2 for TXT.');
-//     process.exit(1);
-//   }
+  } else if (answer === '2') {
+    processFile('input.txt', '.txt', fixUrls);
+  } else {
+    console.error('Invalid choice. Please choose 1 for JSON or 2 for TXT.');
+    process.exit(1);
+  }
 
-//   rl.close();
-// });
-processFile('input.txt', '.json', generateJson);
+  rl.close();
+});
 
 function processFile(inputFile, extension, processFunction) {
   const urls = readFile(inputFile);

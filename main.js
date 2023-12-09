@@ -110,7 +110,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-console.log("Created By AjaxFNC - V5\n-------------------------------------------------")
+console.log("Created By AjaxFNC - V5.1\n-------------------------------------------------")
 rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
   if (answer === '1') {
     processFile('input.txt', '.json', generateJson);
@@ -129,39 +129,17 @@ function processFile(inputFile, extension, processFunction) {
 
   // Check if the output file already exists
   if (fs.existsSync(outputFileName)) {
-    // If it exists, read its content
-    const existingContent = fs.readFileSync(outputFileName, 'utf8');
-    let existingData;
-
-    try {
-      // Try to parse the existing content as JSON
-      existingData = JSON.parse(existingContent);
-      
-      // Ensure existingData is an array
-      if (!Array.isArray(existingData)) {
-        throw new Error('Existing data is not an array.');
-      }
-    } catch (error) {
-      // If parsing fails or existingData is not an array, assume it's a plain text file and split by newline
-      existingData = existingContent.trim().split('\n');
-    }
-
-    // Process the existing data
-    const processedData = processFunction(existingData);
-
-    // Write the updated content back to the file
-    const updatedContent =
-      extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
-
-    fs.writeFileSync(outputFileName, updatedContent, 'utf8');
-  } else {
-    // If the output file doesn't exist, proceed as usual
-    const urls = readFile(inputFile);
-    const processedData = processFunction(urls);
-
-    const outputContent =
-      extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
-
-    writeOutput(outputContent, outputFileName);
+    // If it exists, delete the file
+    fs.unlinkSync(outputFileName);
   }
+
+  // Proceed with processing the input file
+  const urls = readFile(inputFile);
+  const processedData = processFunction(urls);
+
+  const outputContent =
+    extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
+
+  // Write the updated content to a new output file
+  writeOutput(outputContent, outputFileName);
 }

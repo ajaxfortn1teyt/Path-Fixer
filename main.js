@@ -122,10 +122,38 @@ rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
 });
 
 function processFile(inputFile, extension, processFunction) {
-  const urls = readFile(inputFile);
-  const processedData = processFunction(urls);
-
   const outputFileName = 'output' + extension;
-  const outputContent = extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
-  writeOutput(outputContent, outputFileName);
+
+  // Check if the output file already exists
+  if (fs.existsSync(outputFileName)) {
+    // If it exists, read its content
+    const existingContent = fs.readFileSync(outputFileName, 'utf8');
+    let existingData;
+
+    try {
+      // Try to parse the existing content as JSON
+      existingData = JSON.parse(existingContent);
+    } catch (error) {
+      // If parsing fails, assume it's a plain text file and split by newline
+      existingData = existingContent.trim().split('\n');
+    }
+
+    // Process the existing data
+    const processedData = processFunction(existingData);
+
+    // Write the updated content back to the file
+    const updatedContent =
+      extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
+
+    fs.writeFileSync(outputFileName, updatedContent, 'utf8');
+  } else {
+    // If the output file doesn't exist, proceed as usual
+    const urls = readFile(inputFile);
+    const processedData = processFunction(urls);
+
+    const outputContent =
+      extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
+
+    writeOutput(outputContent, outputFileName);
+  }
 }

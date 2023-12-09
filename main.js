@@ -16,7 +16,7 @@ function fixUrls(urls) {
 }
 
 function generateJson(fixedUrls) {
-  return fixedUrls.map(url => {
+  const result = fixedUrls.map(url => {
     const id = url.split('.').pop().replace(/\r/g, '').replace("'", "");
 
     const categories = {
@@ -78,7 +78,6 @@ function generateJson(fixedUrls) {
       }
     }
     prefix = id.substring(0, amt)
-    console.log("JSON output file created.")
     return {
       Category: categories[prefix],
       PrimaryAsset: {
@@ -87,6 +86,9 @@ function generateJson(fixedUrls) {
       }
     };
   });
+
+  console.log("JSON output file created."); // Move this line outside the loop
+  return result;
 }
 
 function readFile(file) {

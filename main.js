@@ -2,7 +2,7 @@ const fs = require('fs');
 const readline = require('readline');
 
 function fixUrls(urls) {
-  const patterns = ['WID_', 'PID_', 'PPID_', 'AGID_', "Consumable_", "CreativePlot_", "D_", "PW_", "G_", "PPID", "AGID", "Ammo"];
+  const patterns = ['WID_', 'PID_', 'PPID_', 'AGID_', "Consumable_", "CreativePlot_", "PW_", "PPID", "AGID", "Ammo"];
   return urls.map(url => {
     // Check for specific patterns first
     for (const pattern of patterns) {
@@ -30,7 +30,7 @@ function generateJson(fixedUrls) {
       "Consumable_": "Consumable",
       "CreativePlot_": "Prefab",
       "PW_": "Prefab",
-      "Ammo_": "Consumable"
+      "Ammo_": "Consumable",
     };
 
     const assetTypes = {
@@ -46,7 +46,7 @@ function generateJson(fixedUrls) {
       "PW_": "PlaysetWorld",
       "Ammo_": "Ammo"
     };
-    
+
     // Check for specific patterns first
     for (const pattern of Object.keys(categories)) {
       if (id.endsWith(pattern)) {
@@ -97,7 +97,7 @@ function writeOutput(output, fileName) {
     if (err) {
       console.error(`Error writing to ${fileName}:`, err);
     } else {
-      
+
     }
   });
 }
@@ -110,7 +110,7 @@ const rl = readline.createInterface({
 console.log("Created By AjaxFNC\n-------------------------------------------------")
 rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
   if (answer === '1') {
-    
+    processFile('input.txt', '.json', generateJson);
   } else if (answer === '2') {
     processFile('input.txt', '.txt', fixUrls);
   } else {
@@ -125,7 +125,7 @@ function processFile(inputFile, extension, processFunction) {
   const urls = readFile(inputFile);
   const processedData = processFunction(urls);
 
-  const outputFileName = 'PrimaryAssets' + extension;
+  const outputFileName = 'output' + extension;
   const outputContent = extension === '.json' ? JSON.stringify(processedData, null, 2) : processedData.join('\n');
   writeOutput(outputContent, outputFileName);
 }

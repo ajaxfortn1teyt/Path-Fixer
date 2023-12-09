@@ -136,8 +136,13 @@ function processFile(inputFile, extension, processFunction) {
     try {
       // Try to parse the existing content as JSON
       existingData = JSON.parse(existingContent);
+      
+      // Ensure existingData is an array
+      if (!Array.isArray(existingData)) {
+        throw new Error('Existing data is not an array.');
+      }
     } catch (error) {
-      // If parsing fails, assume it's a plain text file and split by newline
+      // If parsing fails or existingData is not an array, assume it's a plain text file and split by newline
       existingData = existingContent.trim().split('\n');
     }
 

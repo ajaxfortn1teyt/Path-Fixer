@@ -110,7 +110,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-console.log("Created By AjaxFNC\n-------------------------------------------------")
+console.log("Created By AjaxFNC - V5\n-------------------------------------------------")
 rl.question('What would you like to log to?\n1. JSON\n2. TXT\n', answer => {
   if (answer === '1') {
     processFile('input.txt', '.json', generateJson);
